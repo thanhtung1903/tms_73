@@ -1,0 +1,9 @@
+#scroll{
+	max-height: 400px;
+	overflow-y: scroll;
+}
+img {
+	height: 50px;
+	width: 50px;
+	border-radius: 94%;
+}

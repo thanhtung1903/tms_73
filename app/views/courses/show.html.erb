@@ -1,0 +1,196 @@
+<% provide(:title, t("courses.new.title")) %>
+<% provide(:button_text, t("courses.new.create")) %>
+<div id="page-content" style="min-height: 1310px;">
+   <ul class="breadcrumb breadcrumb-top">
+      <li><%= t "courses.courses" %></li>
+      <li><a href=""><%= t "courses.show.show" %></a></li>
+   </ul>
+   <div class="row">
+      <div class="col-md-7">
+         <div class="block full block-alt-noborder">
+            <h3 class="sub-header text-center">
+              <strong><%= @course.name %></strong>
+              <%= link_to edit_course_path(@course), 
+              class: "pull-right btn btn-alt btn-sm btn-default" do %>
+                <i class="fa fa-pencil"></i>
+              <% end %>
+            </h3>
+            <div class="sub-header">
+               <strong><%= t "courses.id" %> :</strong>
+               <%= @course.id %>
+            </div>
+            <div class="sub-header">
+               <strong><%= t "courses.description" %> :</strong>
+               <%= @course.description %>
+            </div>
+            <div class="sub-header">
+               <strong><%= t "courses.new.start_time" %> :</strong>
+               <%= @course.start_time %>
+            </div>
+            <div class="sub-header">
+               <strong><%= t "courses.new.end_time" %> :</strong>
+               <%= @course.end_time %>
+            </div>
+         </div>
+      </div>
+      <div class="col-md-5">
+         <div class="block">
+            <div class="block-title">
+               <div class="block-options pull-right">
+                <%= link_to "", html:{data-toggle: "modal", 
+                  class: "btn btn-alt btn-sm btn-default", data-toggle: "tooltip" 
+                    ,data-original-title: "Settings"} do %>
+                  <i class="fa fa-pencil" aria-hidden="true" ></i>
+                  <% end %>
+               </div>
+               <h2><strong><% t "course.show.trainer" %></strong><small>: <%= @show_trainers.size%></small></h2>
+            </div>
+            <div class="row text-center">
+               <% @show_trainers.each do |trainer| %>
+               <div class="col-xs-4 col-sm-3 col-lg-2 block-section">
+                    <%= link_to user_path(trainer.id) do %>
+                  <% if trainer.avatar? %>
+                    <%= image_tag trainer.avatar, title: trainer.name %>
+                  <% else %>
+                    <%= image_tag "placeholders/avatars/profile.png", title: trainer.name %>
+                  <% end %>
+                <% end %>
+               </div>
+              <% end %>
+            </div>
+         </div>
+         <div class="block">
+            <div class="block-title">
+              <div class="block-options pull-right">
+                <%= link_to "", html:{data-toggle: "modal", 
+                  class:"btn btn-alt btn-sm btn-default" 
+                    data-toggle: "tooltip", data-original-title: "Settings"} do %>
+                  <i class="fa fa-pencil" aria-hidden="true" ></i>
+                <% end %>
+               </div>
+               <h2><strong><%= t "course.show.trainee" %></strong> <small>: <%= @show_trainees.size %></small></h2>
+            </div>
+            <div class="row text-center">
+               <div class="row text-center">
+                  <% @show_trainees.each do |trainee| %>
+                    <div class="col-xs-4 col-sm-3 col-lg-2 block-section">
+                      <%= link_to user_path(trainee.id) do %>
+                        <% if trainee.avatar? %>
+                          <%= image_tag trainee.avatar, title: trainee.name %>
+                        <% else %>
+                          <%= image_tag "placeholders/avatars/profile.png", title: trainee.name %>
+                        <% end %>
+                      <% end %>
+                    </div>
+                  <% end %>
+               </div>
+            </div>
+         </div>
+         <!-- END Most Viewed Courses Block -->
+      </div>
+   </div>
+  <div id="creatuser" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+     <div class="modal-dialog">
+        <div class="modal-content">
+           <!-- Modal Header -->
+           <div class="modal-header text-center">
+              <h2 class="modal-title"><i class="fa fa-pencil"></i> <%= t "show.course.setting"%></h2>
+           </div>
+           <div class="modal-body">
+              <%= form_for(@course, html: {class: "form-horizontal form-bordered"}) do |f| %>
+              <fieldset>
+                 <div class="col-md-12">
+                    <!-- Widget -->
+                    <div class="widget">
+                       <div class="widget-simple" style="max-height: 400px; overflow-y: scroll;">
+                          <div class="table-responsive">
+                             <table class="table table-borderless table-pricing">
+                                <tbody>
+                                   <%= f.fields_for :users_courses do |p| %>
+                                     <% if p.object.user.trainer? %>
+                                     <tr>
+                                        <td>
+                                           <%= p.check_box :_destroy, {:checked => p.object.persisted?}, '0', '1' %>
+                                        </td>
+                                        <td>
+                                           <%= p.hidden_field :user_id %>
+                                           <%= p.object.user.name %>
+                                        </td>
+                                     </tr>
+                                     <% end %>
+                                   <% end %>
+                                </tbody>
+                             </table>
+                          </div>
+                       </div>
+                    </div>
+                 </div>
+              </fieldset>
+              <div class="form-group form-actions">
+                 <div class="col-xs-12 text-right">
+                    <%= f.submit t("course.show.close"), 
+                    class: "btn btn-sm btn-default", data-dismiss: "modal" %>
+                    <%= f.submit t("course.show.save"), 
+                    class: "btn btn-sm btn-primary" %>
+                 </div>
+              </div>
+           </div>
+        </div>
+        <% end %>
+     </div>
+  </div>
+  <div id="creattrainee" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+     <div class="modal-dialog">
+        <div class="modal-content">
+           <!-- Modal Header -->
+           <div class="modal-header text-center">
+              <h2 class="modal-title"><i class="fa fa-pencil"></i><%= t "show.course.setting"%></h2>
+           </div>
+           <!-- END Modal Header -->
+           <!-- Modal Body -->
+           <div class="modal-body">
+              <%= form_for(@course, html: {class: "form-horizontal form-bordered"}) do |f| %>
+              <fieldset>
+                 <div class="col-md-12">
+                    <!-- Widget -->
+                    <div class="widget">
+                       <div class="widget-simple" style="max-height: 400px; overflow-y: scroll;">
+                          <div class="table-responsive">
+                             <table class="table table-borderless table-pricing">
+                                <tbody>
+                                   <%= f.fields_for :users_courses do |s| %>
+                                   <% if s.object.user.trainee? %>
+                                   <tr>
+                                      <td>
+                                         <%= s.check_box :_destroy, {:checked => s.object.persisted?}, '0', '1' %>
+                                      </td>
+                                      <td>
+                                         <%= s.hidden_field :user_id %>
+                                         <%= s.object.user.name %>
+                                      </td>
+                                   </tr>
+                                   <% end %>
+                                   <% end %>
+                                </tbody>
+                             </table>
+                          </div>
+                       </div>
+                    </div>
+                    <!-- END Widget -->
+                 </div>
+              </fieldset>
+              <div class="form-group form-actions">
+                <div class="col-xs-12 text-right">
+                  <%= f.submit t("course.show.close"), 
+                  class: "btn btn-sm btn-default", data-dismiss: "modal" %>
+                  <%= f.submit t("course.show.save"), 
+                  class: "btn btn-sm btn-primary" %>
+                </div>
+              </div>
+           </div>
+        </div>
+        <% end %>
+     </div>
+     <!-- END Modal Body -->
+  </div>
+</div>

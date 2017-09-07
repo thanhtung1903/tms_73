@@ -110,6 +110,7 @@ en:
     subject:
       confirm: "You sure?"
       delete: "delete"
+      subject: "Subjects"
   error:
     contains: "The form contains"
     count: "error"
@@ -216,6 +217,7 @@ en:
       end_time: "End time"
     show:
       show: "Show"
+      setting: "Setting user"
     index:
       index: "Index"
       title: "All courses"
